@@ -2,7 +2,7 @@
 #define UNARYEXPRESSIONMODEL_H_INCLUDED
 
 #include "UnaryExpression.h"
-
+using namespace std;
 namespace core{
 
     template <class T>
@@ -31,12 +31,16 @@ namespace core{
     T UnaryExpressionModel<T>::evaluate() const{
         if(operand != NULL)
             return evaluate(operand);
+        else
+            throw string("Expression nulle.");
     }
 
     template <class T>
     T UnaryExpressionModel<T>::evaluate(Expression<T>* _operand) const{
         if(_operator != NULL)
             return _operator->evaluate(_operand);
+        else
+            throw string("Expression nulle.");
     }
 
     template <class T>

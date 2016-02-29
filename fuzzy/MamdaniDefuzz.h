@@ -2,6 +2,7 @@
 #define MAMDANIDEFUZZ_H_INCLUDED
 
 #include "../core/BinaryExpression.h"
+#include "../core/Evaluator.h"
 using namespace core;
 
 namespace fuzzy{
@@ -9,20 +10,71 @@ namespace fuzzy{
     template <class T>
     class MamdaniDefuzz : public BinaryExpression<T>{
         private:
-
+            T min, max, step;
         public:
             MamdaniDefuzz();
-            MamdaniDefuzz(const T&, const T&, constT&)
+            MamdaniDefuzz(const T&, const T&, const T&);
             T evaluate(Expression<T>*, Expression<T>*);
+            T getMin();
+            void setMin(const T&);
+            T getMax();
+            void setMax(const T&);
+            T getStep();
+            void setStep(const T&);
+
         protected:
-            Shape buildShape(Expression<T>*, Expression<T>*);
-            virtual float defuzz(Shape);
+            Evaluator::Shape buildShape(Expression<T>*, Expression<T>*);
+            virtual float defuzz(Evaluator::Shape) = 0;
     };
 
+    template <class T>
+    MamdaniDefuzz<T>::MamdaniDefuzz<T>():
+        min(0), max(0), step(0)
+    {}
+
+    template <class T>
+    MamdaniDefuzz<T>::MamdaniDefuzz<T>(const T& _min, const T& _max, const T& _step):
+        min(_min), max(_max), step(_step)
+    {}
+
+    template <class T>
+    Evaluator::Shape MamdaniDefuzz<T>::buildShape(Expression<T>* l, Expression<T>* r){
+        return Evaluator::buildShape(&min, &max, &step, (ValueModel<T>*) l, r);
+    }
 
     template <class T>
     T MamdaniDefuzz<T>::evaluate(Expression<T>* l, Expression<T>* r){
-        return defuzz(buildShape(l, r);
+        return defuzz(buildShape(l, r));
+    }
+
+    template <class T>
+    T MamdaniDefuzz<T>::getMin(){
+        return min;
+    }
+
+    template <class T>
+    void MamdaniDefuzz<T>::setMin(const T& _min){
+        min = _min;
+    }
+
+    template <class T>
+    T MamdaniDefuzz<T>::getMax(){
+        return max;
+    }
+
+    template <class T>
+    void MamdaniDefuzz<T>::setMax(const T& _max){
+        max = _max;
+    }
+
+    template <class T>
+    T MamdaniDefuzz<T>::getStep(){
+        return step;
+    }
+
+    template <class T>
+    void MamdaniDefuzz<T>::setStep(const T& _step){
+        step = _step;
     }
 
     //variable de sortie -> univers de discours

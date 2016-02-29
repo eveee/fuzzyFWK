@@ -27,7 +27,7 @@ int main()
     int *i = new int(4);
     ValueModel<int>* va = new ValueModel<int>(i);
     cout << va->evaluate();
-   //operators
+
     NotMinus1<int> opNot;
     AndMin<int> opAnd;
     OrMax<int> opOr;
@@ -40,9 +40,17 @@ int main()
     cout << u->evaluate();
 
     /*
+
+    //operators
+    NotMinus1 opNot;
+    AndMin opAnd;
+    OrMax opOr;
+    ThenMin opThen;
     CogDefuzz opDefuzz;
-    //fuzzy expession factory
-    FuzzyExpressionFactory f(&opNot,&opAnd,&opOr,&opThen,&opOr,&opDefuzz);
+    AggPlus opAgg;
+
+    //fuzzy expression factory
+    FuzzyExpressionFactory f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
     //membership function
     IsTriangle poor(-5,0,5);
     IsTriangle good(0,5,10);
@@ -51,9 +59,9 @@ int main()
     IsTriangle average(10,15,20);
     IsTriangle generous(20,25,30);
     //values
-    Value service(0);
-    Value food(0);
-    Value tips(0);
+    ValueModel service(0);
+    ValueModel food(0);
+    ValueModel tips(0);
 
     Expression *r =
     f.NewAgg(

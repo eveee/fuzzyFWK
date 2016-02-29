@@ -2,6 +2,7 @@
 #define BINARYSHADOWEXPRESSION_H_INCLUDED
 
 #include "BinaryExpression.h"
+using namespace std;
 
 namespace core{
 
@@ -23,8 +24,9 @@ namespace core{
     T BinaryShadowExpression<T>::evaluate(Expression<T>* left, Expression<T>* right){
         if(target != NULL)
             return target.evaluate(left, right);
+		else
+			throw string("Erreur d'opérateur.");
     }
 
 }
-
 #endif // BINARYSHADOWEXPRESSION_H_INCLUDED

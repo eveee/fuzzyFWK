@@ -27,14 +27,16 @@ namespace core{
     T BinaryExpressionModel<T>::evaluate() const{
         if(left != NULL && right != NULL)
             return evaluate(left, right);
-        //else.... NullExpressionException?
+        else
+            throw string("Expression nulle.");
     }
 
     template <class T>
     T BinaryExpressionModel<T>::evaluate(Expression<T>* _left, Expression<T>* _right) const{
         if(_operator != NULL)
             return _operator->evaluate(_left, _right);
-        //else...
+        else
+            throw string("Expression nulle.");
     }
 }
 
