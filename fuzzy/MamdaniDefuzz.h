@@ -23,23 +23,23 @@ namespace fuzzy{
             void setStep(const T&);
 
         protected:
-            Evaluator::Shape buildShape(Expression<T>*, Expression<T>*);
-            virtual float defuzz(Evaluator::Shape) = 0;
+            typename Evaluator<T>::Shape buildShape(Expression<T>*, Expression<T>*);
+            virtual float defuzz(typename Evaluator<T>::Shape) = 0;
     };
 
     template <class T>
-    MamdaniDefuzz<T>::MamdaniDefuzz<T>():
+    MamdaniDefuzz<T>::MamdaniDefuzz():
         min(0), max(0), step(0)
     {}
 
     template <class T>
-    MamdaniDefuzz<T>::MamdaniDefuzz<T>(const T& _min, const T& _max, const T& _step):
+    MamdaniDefuzz<T>::MamdaniDefuzz(const T& _min, const T& _max, const T& _step):
         min(_min), max(_max), step(_step)
     {}
 
     template <class T>
-    Evaluator::Shape MamdaniDefuzz<T>::buildShape(Expression<T>* l, Expression<T>* r){
-        return Evaluator::buildShape(&min, &max, &step, (ValueModel<T>*) l, r);
+    typename Evaluator<T>::Shape MamdaniDefuzz<T>::buildShape(Expression<T>* l, Expression<T>* r){
+        return typename Evaluator<T>::buildShape(&min, &max, &step, (ValueModel<T>*) l, r);
     }
 
     template <class T>

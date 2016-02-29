@@ -15,6 +15,8 @@
 #include "fuzzy/ThenMult.h"
 #include "fuzzy/AggMax.h"
 #include "fuzzy/AggPlus.h"
+#include "fuzzy/CogDefuzz.h"
+#include "core/FuzzyFactory.h"
 
 using namespace std;
 using namespace core;
@@ -32,6 +34,8 @@ int main()
     AndMin<int> opAnd;
     OrMax<int> opOr;
     ThenMin<int> opThen;
+//    CogDefuzz<int> opDefuzz;
+    AggPlus<int> opAgg;
 
     BinaryExpressionModel<int> *b = new BinaryExpressionModel<int>(&opThen, v, va);
     cout << b->evaluate();
@@ -50,7 +54,7 @@ int main()
     AggPlus opAgg;
 
     //fuzzy expression factory
-    FuzzyExpressionFactory f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
+    FuzzyFactory f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
     //membership function
     IsTriangle poor(-5,0,5);
     IsTriangle good(0,5,10);
