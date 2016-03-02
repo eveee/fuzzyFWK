@@ -23,7 +23,7 @@ using namespace core;
 using namespace fuzzy;
 
 int main()
-{
+{/*
     ValueModel<int>* v = new ValueModel<int>();
     cout << v->evaluate();
     int *i = new int(4);
@@ -43,44 +43,51 @@ int main()
     UnaryExpressionModel<int> *u = new UnaryExpressionModel<int>(&opNot, va);
     cout << u->evaluate();
 
-    /*
+*/
 
     //operators
-    NotMinus1 opNot;
-    AndMin opAnd;
-    OrMax opOr;
-    ThenMin opThen;
-    CogDefuzz opDefuzz;
-    AggPlus opAgg;
+    NotMinus1<int> opNot;
+    AndMin<int> opAnd;
+    OrMax<int> opOr;
+    ThenMin<int> opThen;
+    CogDefuzz<int> opDefuzz;
+    AggPlus<int> opAgg;
 
     //fuzzy expression factory
-    FuzzyFactory f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
-    //membership function
-    IsTriangle poor(-5,0,5);
-    IsTriangle good(0,5,10);
-    IsTriangle excellent(5,10,15);
-    IsTriangle cheap(0,5,10);
-    IsTriangle average(10,15,20);
-    IsTriangle generous(20,25,30);
-    //values
-    ValueModel service(0);
-    ValueModel food(0);
-    ValueModel tips(0);
+    FuzzyFactory<int> f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
 
-    Expression *r =
-    f.NewAgg(
-        f.NewAgg(
-            f.NewThen(
-                f.NewIs(&service,&poor),f.NewIs(&tips,&cheap)
+
+    //membership function
+    IsTriangle<int> poor(-5,0,5);
+    IsTriangle<int> good(0,5,10);
+    IsTriangle<int> excellent(5,10,15);
+    IsTriangle<int> cheap(0,5,10);
+    IsTriangle<int> average(10,15,20);
+    IsTriangle<int> generous(20,25,30);
+
+
+    //values
+    ValueModel<int> service(0);
+    ValueModel<int> food(0);
+    ValueModel<int> tips(0);
+
+
+    Expression<int> *r =
+    f.newAgg(
+        f.newAgg(
+            f.newThen(
+                f.newIs(&poor ,&service),f.newIs(&cheap, &tips)
             ),
-            f.NewThen(
-                f.NewIs(&service,&good),f.NewIs(&tips,&average)
+            f.newThen(
+                f.newIs(&good, &service),f.newIs(&average, &tips)
             )
         ),
-        f.NewThen(
-            f.NewIs(&service,&excellent),f.NewIs(&tips,&generous)
+        f.newThen(
+            f.newIs(&excellent, &service),f.newIs(&generous, &tips)
         )
     );
+
+    /*
     //defuzzification
     Expression *system = f.NewDefuzz(&tips, r, 0, 25, 1);
     //apply input

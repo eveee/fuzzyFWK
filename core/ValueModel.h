@@ -12,10 +12,10 @@ namespace core{
 
         public:
 			ValueModel();
-            ValueModel(const T*);
+            ValueModel(const T&);
 			virtual ~ValueModel() {};
             virtual T evaluate() const;
-            void setValue(const T*);
+            void setValue(const T&);
     };
 
     template <class T>
@@ -23,8 +23,8 @@ namespace core{
         value(0) {} // value(T(0))
 
     template <class T>
-    ValueModel<T>::ValueModel(const T* _value):
-        value(*_value) {}
+    ValueModel<T>::ValueModel(const T& _value):
+        value(_value) {}
 
     template <class T>
     T ValueModel<T>::evaluate() const{
@@ -32,8 +32,8 @@ namespace core{
     }
 
     template <class T>
-    void ValueModel<T>::setValue(const T* _value){
-        value = *_value;
+    void ValueModel<T>::setValue(const T& _value){
+        value = _value;
     }
 
 }

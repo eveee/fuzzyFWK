@@ -16,6 +16,12 @@ namespace core {
 		public :
 
 			ExpressionFactory();
+			~ExpressionFactory(){
+			    typename std::set<Expression<T>* >::iterator it;
+                for(it = memory.begin(); it!=memory.end(); it++){
+                    delete *it;
+                }
+			}
 			ExpressionFactory(set<Expression<T>* >);
 			Expression<T>* Hold(Expression<T>*);
 			Expression<T>* Value(T*);
@@ -37,9 +43,7 @@ namespace core {
 	template <class T>
 	ExpressionFactory<T>::ExpressionFactory(set<Expression<T>* > _memory) :
 		memory(_memory)
-	{
-
-	}
+	{}
 
 	template <class T>
 	Expression<T>* ExpressionFactory<T>::Hold(Expression<T>* ope)

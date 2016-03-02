@@ -3,6 +3,7 @@
 
 #include "ExpressionFactory.h"
 #include "../fuzzy/Operators.h"
+#include "../fuzzy/MamdaniDefuzz.h"
 
 
 namespace core {
@@ -11,6 +12,8 @@ namespace core {
 	class FuzzyFactory : public ExpressionFactory<T> {
 
 		public :
+
+		    FuzzyFactory(fuzzy::Not<T>*, fuzzy::And<T>*, fuzzy::Or<T>*, fuzzy::Then<T>*, fuzzy::Agg<T>*, fuzzy::MamdaniDefuzz<T>*);
 
 			Expression<T>* newNot(Expression<T>*) const;
 			Expression<T>* newIs(fuzzy::Is<T>*, Expression<T>*) const;
@@ -39,9 +42,15 @@ namespace core {
 	};
 
 	template <class T>
+	FuzzyFactory<T>::FuzzyFactory(fuzzy::Not<T>* __not, fuzzy::And<T>* __and, fuzzy::Or<T>* __or, fuzzy::Then<T>* __then, fuzzy::Agg<T>* __agg, fuzzy::MamdaniDefuzz<T>* __defuzz):
+	    _not(new UnaryShadowExpression<T>(__not)), _and(new BinaryShadowExpression<T>(__and)), _or(new BinaryShadowExpression<T>(__or)), _then(new BinaryShadowExpression<T>(__then)), _agg(new BinaryShadowExpression<T>(__agg)), _defuzz(new BinaryShadowExpression<T>(__defuzz))
+    {
+    }
+
+	template <class T>
 	Expression<T>* FuzzyFactory<T>::newNot(Expression<T>* o) const
 	{
-		return new UnaryExpressionModel<T>(_not, o);
+		return new UnaryExpressionModel<T>(_not.getTarget(), o);
 	}
 
 	template <class T>
@@ -53,31 +62,31 @@ namespace core {
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newAnd(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_and, l, r);
+		return new BinaryExpressionModel<T>(_and.getTarget(), l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newOr(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_or, l, r);
+		return new BinaryExpressionModel<T>(_or.getTarget(), l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newThen(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_then, l, r);
+		return new BinaryExpressionModel<T>(_then.getTarget(), l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newAgg(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_agg, l, r);
+		return new BinaryExpressionModel<T>(_agg.getTarget(), l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newDefuzz(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_defuzz, l, r);
+		return new BinaryExpressionModel<T>(_defuzz.getTarget(), l, r);
 	}
 
 	template <class T>

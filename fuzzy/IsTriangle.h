@@ -15,7 +15,7 @@ namespace fuzzy{
             T max;
         public :
             IsTriangle(const T&, const T&, const T&);
-            T evaluate(Expression<T>*);
+            virtual T evaluate(Expression<T>*) const;
             T getMin() const;
             T getMid() const;
             T getMax() const;
@@ -27,7 +27,7 @@ namespace fuzzy{
         min(_min), mid(_mid), max(_max){}
 
     template <class T>
-    T IsTriangle<T>::evaluate(Expression<T>* operand){
+    T IsTriangle<T>::evaluate(Expression<T>* operand) const{
         T value = operand->evaluate();
         if (value <= min || value >= max)
             return 0;

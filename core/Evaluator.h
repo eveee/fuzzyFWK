@@ -18,7 +18,7 @@ namespace core{
     template <class T>
     typename Evaluator<T>::Shape Evaluator<T>::BuildShape(const T& min, const T& max, const T& step, ValueModel<T>* value, Expression<T>* f){
         vector<T> x, y;
-        for (T i= min ;i <= max ;i += step){
+        for (T i = min; i <= max; i += step){
             value->setValue(i);
             y.push_back(f->evaluate());
             x.push_back(i);
