@@ -10,11 +10,11 @@ namespace fuzzy{
     template <class T>
     class AndMult : public And<T>{
         public :
-            T evaluate(Expression<T>*, Expression<T>*);
+            virtual T evaluate(Expression<T>*, Expression<T>*) const;
     };
 
     template <class T>
-    T AndMult<T>::evaluate(Expression<T>* l, Expression<T>* r){
+    T AndMult<T>::evaluate(Expression<T>* l, Expression<T>* r) const{
         T left = l->evaluate();
         T right = r->evaluate();
         return (left*right);

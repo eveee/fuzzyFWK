@@ -107,37 +107,37 @@ namespace core {
 	template <class T>
 	void FuzzyFactory<T>::changeNot(fuzzy::Not<T>* __not)
 	{
-		_not.setTarget(__not);
+		_not->setTarget(__not);
 	}
 
 	template <class T>
 	void FuzzyFactory<T>::changeAnd(fuzzy::And<T>* __and)
 	{
-		_and.setTarget(__and);
+		_and->setTarget(__and);
 	}
 
 	template <class T>
 	void FuzzyFactory<T>::changeOr(fuzzy::Or<T>* __or)
 	{
-		_or.setTarget(__or);
+		_or->setTarget(__or);
 	}
 
 	template <class T>
 	void FuzzyFactory<T>::changeThen(fuzzy::Then<T>* __then)
 	{
-		_then.setTarget(__then);
+		_then->setTarget(__then);
 	}
 
 	template <class T>
 	void FuzzyFactory<T>::changeAgg(fuzzy::Agg<T>* __agg)
 	{
-		_agg.setTarget(__agg);
+		_agg->setTarget(__agg);
 	}
 
 	template <class T>
 	void FuzzyFactory<T>::changeDefuzz(fuzzy::MamdaniDefuzz<T>* __defuzz)
 	{
-		_defuzz.setTarget(__defuzz);
+		_defuzz->setTarget(__defuzz);
 	}
 
 }

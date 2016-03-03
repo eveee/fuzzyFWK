@@ -23,28 +23,33 @@ using namespace core;
 using namespace fuzzy;
 
 int main()
-{/*
-    ValueModel<int>* v = new ValueModel<int>();
-    cout << v->evaluate();
-    int *i = new int(4);
-    ValueModel<int>* va = new ValueModel<int>(i);
-    cout << va->evaluate();
+{
+    ValueModel<float> v(2);
+    cout << v.evaluate() << endl;
+    ValueModel<float> va(4);
+    cout << va.evaluate() << endl;
 
-    NotMinus1<int> opNot;
-    AndMin<int> opAnd;
-    OrMax<int> opOr;
-    ThenMin<int> opThen;
-//    CogDefuzz<int> opDefuzz;
-    AggPlus<int> opAgg;
+    NotMinus1<float> opNot;
+    AndMin<float> opAnd;
+    AndMult<float> opAnd2;
+    OrMax<float> opOr;
+    ThenMin<float> opThen;
+    CogDefuzz<float> opDefuzz;
+    AggPlus<float> opAgg;
 
-    BinaryExpressionModel<int> *b = new BinaryExpressionModel<int>(&opThen, v, va);
-    cout << b->evaluate();
+    IsTriangle<float> poor(-5,0,5);
 
-    UnaryExpressionModel<int> *u = new UnaryExpressionModel<int>(&opNot, va);
-    cout << u->evaluate();
+    UnaryExpressionModel<float> *b = new UnaryExpressionModel<float>(&poor, &va);
+    cout << b->evaluate() << endl;
 
-*/
+    //UnaryExpressionModel<int> *u = new UnaryExpressionModel<int>(&opNot, va);
+    //cout << u->evaluate();
 
+    FuzzyFactory<float> f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
+    cout << f.newAnd(&v,&va)->evaluate() << endl;
+    f.changeAnd(&opAnd2);
+    cout << f.newAnd(&v,&va)->evaluate() << endl;
+/*
     //operators
     NotMinus1<int> opNot;
     AndMin<int> opAnd;

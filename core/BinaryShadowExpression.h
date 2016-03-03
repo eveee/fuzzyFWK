@@ -42,7 +42,7 @@ namespace core{
     template <class T>
     void BinaryShadowExpression<T>::setTarget(const BinaryExpression<T>* o)
     {
-       	target = o;
+       	target = const_cast<BinaryExpression<T>* >(o);
     }
 
     template <class T>
