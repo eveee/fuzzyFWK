@@ -21,7 +21,7 @@ namespace core {
 			Expression<T>* newOr(Expression<T>*, Expression<T>*) const;
 			Expression<T>* newThen(Expression<T>*, Expression<T>*) const;
 			Expression<T>* newAgg(Expression<T>*, Expression<T>*) const;
-			Expression<T>* newDefuzz(Expression<T>*, Expression<T>*) const;
+			Expression<T>* newDefuzz(Expression<T>*, Expression<T>*, const T& min, const T& max, const T& step) const;
 
 			void changeNot(fuzzy::Not<T>*);
 			void changeAnd(fuzzy::And<T>*);
@@ -32,61 +32,76 @@ namespace core {
 
 		private :
 
-			UnaryShadowExpression<T> _not;
-			BinaryShadowExpression<T> _and;
-			BinaryShadowExpression<T> _or;
-			BinaryShadowExpression<T> _then;
-			BinaryShadowExpression<T> _agg;
-			BinaryShadowExpression<T> _defuzz;
+			UnaryShadowExpression<T>* _not;
+			BinaryShadowExpression<T>* _and;
+			BinaryShadowExpression<T>* _or;
+			BinaryShadowExpression<T>* _then;
+			BinaryShadowExpression<T>* _agg;
+			BinaryShadowExpression<T>* _defuzz;
 
 	};
 
 	template <class T>
-	FuzzyFactory<T>::FuzzyFactory(fuzzy::Not<T>* __not, fuzzy::And<T>* __and, fuzzy::Or<T>* __or, fuzzy::Then<T>* __then, fuzzy::Agg<T>* __agg, fuzzy::MamdaniDefuzz<T>* __defuzz):
-	    _not(new UnaryShadowExpression<T>(__not)), _and(new BinaryShadowExpression<T>(__and)), _or(new BinaryShadowExpression<T>(__or)), _then(new BinaryShadowExpression<T>(__then)), _agg(new BinaryShadowExpression<T>(__agg)), _defuzz(new BinaryShadowExpression<T>(__defuzz))
+	FuzzyFactory<T>::FuzzyFactory(fuzzy::Not<T>* __not,
+                               fuzzy::And<T>* __and,
+                               fuzzy::Or<T>* __or,
+                               fuzzy::Then<T>* __then,
+                               fuzzy::Agg<T>* __agg,
+                               fuzzy::MamdaniDefuzz<T>* __defuzz):
+	    _not(new UnaryShadowExpression<T>(__not)),
+	    _and(new BinaryShadowExpression<T>(__and)),
+	    _or(new BinaryShadowExpression<T>(__or)),
+	    _then(new BinaryShadowExpression<T>(__then)),
+	    _agg(new BinaryShadowExpression<T>(__agg)),
+	    _defuzz(new BinaryShadowExpression<T>(__defuzz))
     {
     }
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newNot(Expression<T>* o) const
 	{
-		return new UnaryExpressionModel<T>(_not.getTarget(), o);
+		return ExpressionFactory<T>::newUnary(_not, o);
 	}
 
 	template <class T>
-	Expression<T>* FuzzyFactory<T>::newIs(fuzzy::Is<T>* is, Expression<T>* o) const
+	Expression<T>* FuzzyFactory<T>::newIs(fuzzy::Is<T>* _is, Expression<T>* o) const
 	{
-		return new UnaryExpressionModel<T>(is, o);
+		return ExpressionFactory<T>::newUnary(_is, o);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newAnd(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_and.getTarget(), l, r);
+		return ExpressionFactory<T>::newBinary(_and, l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newOr(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_or.getTarget(), l, r);
+		return ExpressionFactory<T>::newBinary(_or, l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newThen(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_then.getTarget(), l, r);
+		return ExpressionFactory<T>::newBinary(_then, l, r);
 	}
 
 	template <class T>
 	Expression<T>* FuzzyFactory<T>::newAgg(Expression<T>* l, Expression<T>* r) const
 	{
-		return new BinaryExpressionModel<T>(_agg.getTarget(), l, r);
+		return ExpressionFactory<T>::newBinary(_agg, l, r);
 	}
 
 	template <class T>
-	Expression<T>* FuzzyFactory<T>::newDefuzz(Expression<T>* l, Expression<T>* r) const
+	Expression<T>* FuzzyFactory<T>::newDefuzz(Expression<T>* l, Expression<T>* r, const T& min, const T& max, const T& step) const
 	{
-		return new BinaryExpressionModel<T>(_defuzz.getTarget(), l, r);
+        fuzzy::MamdaniDefuzz<T>* target = (fuzzy::MamdaniDefuzz<T>*) _defuzz->getTarget();
+		target->setMin(min);
+		target->setMax(max);
+		target->setStep(step);
+
+		return ExpressionFactory<T>::newBinary(_defuzz, l, r);
 	}
 
 	template <class T>

@@ -87,15 +87,17 @@ int main()
         )
     );
 
-    /*
+
     //defuzzification
-    Expression *system = f.NewDefuzz(&tips, r, 0, 25, 1);
+    Expression<int> *system = f.newDefuzz(&tips, r, 0, 25, 1);
+
+    /*
     //apply input
     float s;
     while(true){
         cout << "service : ";cin >> s;
-        service.SetValue(s);
-        cout << "tips -> " << system->Evaluate() << endl;
+        service.setValue(s);
+        cout << "tips -> " << system->evaluate() << endl;
     }*/
     return 0;
 }

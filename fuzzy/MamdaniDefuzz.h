@@ -15,12 +15,12 @@ namespace fuzzy{
             MamdaniDefuzz();
             MamdaniDefuzz(const T&, const T&, const T&);
             virtual T evaluate(Expression<T>*, Expression<T>*) const;
-            T getMin();
-            void setMin(const T&);
-            T getMax();
-            void setMax(const T&);
-            T getStep();
-            void setStep(const T&);
+            virtual T getMin() const;
+            virtual void setMin(const T&);
+            virtual T getMax() const;
+            virtual void setMax(const T&);
+            virtual T getStep() const;
+            virtual void setStep(const T&);
 
         protected:
             typename Evaluator<T>::Shape buildShape(Expression<T>*, Expression<T>*) const;
@@ -48,7 +48,7 @@ namespace fuzzy{
     }
 
     template <class T>
-    T MamdaniDefuzz<T>::getMin(){
+    T MamdaniDefuzz<T>::getMin() const{
         return min;
     }
 
@@ -58,7 +58,7 @@ namespace fuzzy{
     }
 
     template <class T>
-    T MamdaniDefuzz<T>::getMax(){
+    T MamdaniDefuzz<T>::getMax() const{
         return max;
     }
 
@@ -68,7 +68,7 @@ namespace fuzzy{
     }
 
     template <class T>
-    T MamdaniDefuzz<T>::getStep(){
+    T MamdaniDefuzz<T>::getStep() const{
         return step;
     }
 

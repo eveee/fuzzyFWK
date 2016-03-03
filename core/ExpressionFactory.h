@@ -24,9 +24,8 @@ namespace core {
 			}
 			ExpressionFactory(set<Expression<T>* >);
 			Expression<T>* Hold(Expression<T>*);
-			Expression<T>* Value(T*);
-			Expression<T>* newUnary(UnaryExpression<T>*, Expression<T>*);
-			Expression<T>* newBinary(BinaryExpression<T>*, Expression<T>*, Expression<T>*);
+			Expression<T>* newUnary(UnaryExpression<T>*, Expression<T>*) const;
+			Expression<T>* newBinary(BinaryExpression<T>*, Expression<T>*, Expression<T>*) const;
 
 		private :
 
@@ -49,24 +48,19 @@ namespace core {
 	Expression<T>* ExpressionFactory<T>::Hold(Expression<T>* ope)
 	{
 		memory.insert(ope);
+		return ope;
 	}
 
 	template <class T>
-	Expression<T>* ExpressionFactory<T>::Value(T* v)
+	Expression<T>* ExpressionFactory<T>::newUnary(UnaryExpression<T>* ope, Expression<T>* o) const
 	{
-		return new ValueModel<T>(v);
+		return new UnaryExpressionModel<T>(ope, o);
 	}
 
 	template <class T>
-	Expression<T>* ExpressionFactory<T>::newUnary(UnaryExpression<T>* ope, Expression<T>* o)
+	Expression<T>* ExpressionFactory<T>::newBinary(BinaryExpression<T>* ope, Expression<T>* l, Expression<T>* r) const
 	{
-		return new UnaryExpression<T>(ope, o);
-	}
-
-	template <class T>
-	Expression<T>* ExpressionFactory<T>::newBinary(BinaryExpression<T>* ope, Expression<T>* l, Expression<T>* r)
-	{
-		return new BinaryExpression<T>(ope, l, r);
+		return new BinaryExpressionModel<T>(ope, l, r);
 	}
 
 }

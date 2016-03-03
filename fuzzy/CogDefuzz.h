@@ -8,8 +8,26 @@ namespace fuzzy{
     template <class T>
     class CogDefuzz : public MamdaniDefuzz<T>{
         public :
+            CogDefuzz();
+            CogDefuzz(const T&, const T&, const T&);
             virtual T defuzz(typename core::Evaluator<T>::Shape) const;
+        private:
+            T min, max, step;
     };
+
+    template <class T>
+    CogDefuzz<T>::CogDefuzz():
+        min(0), max(0), step(0)
+    {
+
+    }
+
+    template <class T>
+    CogDefuzz<T>::CogDefuzz(const T& _min, const T& _max, const T& _step):
+        min(_min), max(_max), step(_step)
+    {
+
+    }
 
     template <class T>
     T CogDefuzz<T>::defuzz(typename core::Evaluator<T>::Shape sh) const{
