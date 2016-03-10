@@ -7,6 +7,11 @@
 #include "core/BinaryShadowExpression.h"
 #include "fuzzy/NotMinus1.h"
 #include "fuzzy/IsTriangle.h"
+#include "fuzzy/IsTrapeze.h"
+#include "fuzzy/IsTrapezeLeft.h"
+#include "fuzzy/IsTrapezeRight.h"
+#include "fuzzy/IsBell.h"
+#include "fuzzy/IsGaussian.h"
 #include "fuzzy/AndMin.h"
 #include "fuzzy/AndMult.h"
 #include "fuzzy/OrMax.h"
@@ -66,29 +71,31 @@ int main()
     IsTriangle<float> poor(-5,0,5);
     IsTriangle<float> good(0,5,10);
     IsTriangle<float> excellent(5,10,15);
+    IsTriangle<float> rancid(-5,0,5);
+    IsTriangle<float> delicious(5,10,15);
     IsTriangle<float> cheap(0,5,10);
     IsTriangle<float> average(10,15,20);
     IsTriangle<float> generous(20,25,30);
-
 
     //values
     ValueModel<float> service(0);
     ValueModel<float> food(0);
     ValueModel<float> tips(0);
 
-
     Expression<float> *r =
     f.newAgg(
         f.newAgg(
             f.newThen(
-                f.newIs(&poor ,&service),f.newIs(&cheap, &tips)
+                    f.newAgg(f.newIs(&poor, &service), f.newIs(&rancid, &food)),
+                    f.newIs(&cheap, &tips)
             ),
             f.newThen(
                 f.newIs(&good, &service),f.newIs(&average, &tips)
             )
         ),
         f.newThen(
-            f.newIs(&excellent, &service),f.newIs(&generous, &tips)
+            f.newAgg(f.newIs(&excellent, &service), f.newIs(&delicious, &food)),
+            f.newIs(&generous, &tips)
         )
     );
 
@@ -97,12 +104,13 @@ int main()
     Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
 
     //apply input
-    float s;
+    float s, fo;
     while(true){
         cout << "service : "; cin >> s;
         service.setValue(s);
+        cout << "food : "; cin >> fo;
+        food.setValue(fo);
         cout << "tips -> " << system->evaluate() << endl;
-        }
     }
     return 0;
 }
