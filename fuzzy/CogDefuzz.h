@@ -31,10 +31,11 @@ namespace fuzzy{
 
     template <class T>
     T CogDefuzz<T>::defuzz(typename core::Evaluator<T>::Shape sh) const{
-        T x_sum;
+        T sum_x, sum_y;
         for (unsigned int i = 0; i<sh.first.size(); i++){
-            x_sum += sh.first[i];
-        } return x_sum / sh.first.size();
+            sum_x += (sh.first[i] * sh.second[i]);
+            sum_y += sh.second[i];
+        } return sum_x / sum_y;
     }
 
 

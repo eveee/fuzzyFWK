@@ -23,7 +23,7 @@ using namespace core;
 using namespace fuzzy;
 
 int main()
-{
+{/*
     ValueModel<float> v(2);
     cout << v.evaluate() << endl;
     ValueModel<float> va(4);
@@ -49,35 +49,35 @@ int main()
     cout << f.newAnd(&v,&va)->evaluate() << endl;
     f.changeAnd(&opAnd2);
     cout << f.newAnd(&v,&va)->evaluate() << endl;
-/*
+*/
     //operators
-    NotMinus1<int> opNot;
-    AndMin<int> opAnd;
-    OrMax<int> opOr;
-    ThenMin<int> opThen;
-    CogDefuzz<int> opDefuzz;
-    AggPlus<int> opAgg;
+    NotMinus1<float> opNot;
+    AndMin<float> opAnd;
+    OrMax<float> opOr;
+    ThenMin<float> opThen;
+    CogDefuzz<float> opDefuzz;
+    AggPlus<float> opAgg;
 
     //fuzzy expression factory
-    FuzzyFactory<int> f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
+    FuzzyFactory<float> f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
 
 
     //membership function
-    IsTriangle<int> poor(-5,0,5);
-    IsTriangle<int> good(0,5,10);
-    IsTriangle<int> excellent(5,10,15);
-    IsTriangle<int> cheap(0,5,10);
-    IsTriangle<int> average(10,15,20);
-    IsTriangle<int> generous(20,25,30);
+    IsTriangle<float> poor(-5,0,5);
+    IsTriangle<float> good(0,5,10);
+    IsTriangle<float> excellent(5,10,15);
+    IsTriangle<float> cheap(0,5,10);
+    IsTriangle<float> average(10,15,20);
+    IsTriangle<float> generous(20,25,30);
 
 
     //values
-    ValueModel<int> service(0);
-    ValueModel<int> food(0);
-    ValueModel<int> tips(0);
+    ValueModel<float> service(0);
+    ValueModel<float> food(0);
+    ValueModel<float> tips(0);
 
 
-    Expression<int> *r =
+    Expression<float> *r =
     f.newAgg(
         f.newAgg(
             f.newThen(
@@ -94,15 +94,15 @@ int main()
 
 
     //defuzzification
-    Expression<int> *system = f.newDefuzz(&tips, r, 0, 25, 1);
+    Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
 
-    /*
     //apply input
     float s;
     while(true){
-        cout << "service : ";cin >> s;
+        cout << "service : "; cin >> s;
         service.setValue(s);
         cout << "tips -> " << system->evaluate() << endl;
-    }*/
+        }
+    }
     return 0;
 }
