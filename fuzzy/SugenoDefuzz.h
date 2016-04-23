@@ -13,9 +13,20 @@ namespace fuzzy{
 
     template <class T>
     T SugenoDefuzz<T>::evaluate(Expression<T>*[] operands) const{
-        //SugenoConclusion *sgc = new SugenoConclusion({a, b, c})->evaluate(operands);
-    }
+        T denum = 0; T num = 0;
+        BinaryExpressionModel<T> *bem;
+        BinaryShadowExpression<T> *bse;
+        SugenoThen<T> *st;
 
+        for(int i = 0; i < ; i++){ //changer tableau en vector pour avoir la size, dans sugenoconclusion aussi
+            bem = (binaryexpressionmodel) (operands.at(i));
+            bse = (binaryshadowexpression) (bem->getOperator());
+            st = (sugenothen) (bse-> getTarget());
+            denum += st->getPremiseValue();
+            num += operands.at(i);
+        }
+        return (denum == 0 ? 0 : num/denum);
+    }
 
 }
 

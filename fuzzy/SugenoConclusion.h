@@ -12,7 +12,7 @@ namespace fuzzy{
             virtual T evaluate(Expression<T>*[]) const;
         private:
             vector<T> coeff;
-};
+    };
 
     template <class T>
     SugenoConclusion<T>::SugenoConclusion(const vector<T>& _coeff):
@@ -28,8 +28,6 @@ namespace fuzzy{
         z += coeff.at(coeff.size() - 1);
         return z;
     }
-
-
 }
 
 

@@ -16,6 +16,7 @@ namespace core{
             BinaryExpressionModel(BinaryExpression<T>*, Expression<T>*, Expression<T>*);
             virtual T evaluate() const;
             virtual T evaluate(Expression<T>*, Expression<T>*) const;
+            BinaryExpression<T>* getOperator() const;
     };
 
 
@@ -35,6 +36,14 @@ namespace core{
     T BinaryExpressionModel<T>::evaluate(Expression<T>* _left, Expression<T>* _right) const{
         if(_operator != NULL)
             return _operator->evaluate(_left, _right);
+        else
+            throw string("Expression nulle.");
+    }
+
+    template <class T>
+    BinaryExpression<T>* BinaryExpressionModel<T>::getOperator() const{
+        if(_operator != NULL)
+            return _operator;
         else
             throw string("Expression nulle.");
     }
