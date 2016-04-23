@@ -31,8 +31,9 @@ namespace fuzzy{
 
     template <class T>
     T CogDefuzz<T>::defuzz(typename core::Evaluator<T>::Shape sh) const{
-        T sum_x, sum_y;
-        for (unsigned int i = 0; i<sh.first.size(); i++){
+        T sum_x = sh.first[0] * sh.second[0];
+        T sum_y = sh.second[0];
+        for (unsigned int i = 1; i<sh.first.size(); i++){
             sum_x += (sh.first[i] * sh.second[i]);
             sum_y += sh.second[i];
         } return sum_x / sum_y;

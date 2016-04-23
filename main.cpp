@@ -21,6 +21,8 @@
 #include "fuzzy/AggMax.h"
 #include "fuzzy/AggPlus.h"
 #include "fuzzy/CogDefuzz.h"
+#include "fuzzy/SugenoDefuzz.h"
+#include "fuzzy/SugenoConclusion.h"
 #include "core/FuzzyFactory.h"
 
 using namespace std;
@@ -54,7 +56,7 @@ int main()
     cout << f.newAnd(&v,&va)->evaluate() << endl;
     f.changeAnd(&opAnd2);
     cout << f.newAnd(&v,&va)->evaluate() << endl;
-*/
+
     //operators
     NotMinus1<float> opNot;
     AndMin<float> opAnd;
@@ -65,7 +67,6 @@ int main()
 
     //fuzzy expression factory
     FuzzyFactory<float> f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
-
 
     //membership function
     IsTriangle<float> poor(-5,0,5);
@@ -112,5 +113,61 @@ int main()
         food.setValue(fo);
         cout << "tips -> " << system->evaluate() << endl;
     }
+*/
+
+    /*vector<float> c = {1, 2, 3, 4, 5};
+    Expression<float>* vm[4] = {new ValueModel<float>(1), new ValueModel<float>(2), new ValueModel<float>(3), new ValueModel<float>(4)};
+    SugenoConclusion<float> opSg(c);
+    cout << opSg.evaluate(vm);
+    */
+
+    //Mettre SugenoThen dans la factory pour que ça soit appelé avec newThen
+
+     //operators
+    NotMinus1<float> opNot;
+    AndMin<float> opAnd;
+    OrMax<float> opOr;
+    ThenMin<float> opThen;
+    CogDefuzz<float> opDefuzz;
+    AggPlus<float> opAgg;
+
+    //fuzzy expression factory
+    FuzzyFactory<float> f(&opNot,&opAnd,&opOr,&opThen,&opAgg,&opDefuzz);
+
+    //membership function
+    IsTriangle<float> poor(-5,0,5);
+    IsTriangle<float> good(0,5,10);
+    IsTriangle<float> excellent(5,10,15);
+    IsTriangle<float> rancid(-5,0,5);
+    IsTriangle<float> delicious(5,10,15);
+    IsTriangle<float> cheap(0,5,10);
+    IsTriangle<float> average(10,15,20);
+    IsTriangle<float> generous(20,25,30);
+
+    //values
+    ValueModel<float> service(0);
+    ValueModel<float> food(0);
+    ValueModel<float> tips(0);
+
+    Expression<float> *r =
+    f.newAgg(
+        f.newAgg(
+            f.newThen(
+                    f.newOr(f.newIs(&poor, &service), f.newIs(&rancid, &food)),
+                    f.newIs(&cheap, &tips)
+            ),
+            f.newThen(
+                f.newIs(&good, &service),f.newIs(&average, &tips)
+            )
+        ),
+        f.newThen(
+            f.newOr(f.newIs(&excellent, &service), f.newIs(&delicious, &food)),
+            f.newIs(&generous, &tips)
+        )
+    );
+
+    //defuzzification
+    Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
+
     return 0;
 }

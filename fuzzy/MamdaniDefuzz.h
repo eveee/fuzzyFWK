@@ -77,13 +77,6 @@ namespace fuzzy{
         step = _step;
     }
 
-    //variable de sortie -> univers de discours
-    /*
-        système de type mamdani : à partir d'une forme obtenir une variable réelle (sous classes) + construire la forme à partir des aggrégations (commun à tous les opérateurs de défuzzification)
-
-
-    */
-
 }
 
 #endif // MAMDANIDEFUZZ_H_INCLUDED

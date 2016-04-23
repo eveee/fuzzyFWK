@@ -8,7 +8,7 @@ namespace core{
     template <class T>
     class NaryExpression{
         public:
-            virtual T evaluate(Expression<T>[]*) const = 0;
+            virtual T evaluate(Expression<T>*[]) const = 0;
     };
 }
 
