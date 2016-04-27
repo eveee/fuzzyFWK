@@ -2,13 +2,14 @@
 #define NARYEXPRESSION_H_INCLUDED
 
 #include "BinaryExpression.h"
+#include <vector>
 
 namespace core{
 
     template <class T>
     class NaryExpression{
         public:
-            virtual T evaluate(Expression<T>*[]) const = 0;
+            virtual T evaluate(vector<Expression<T>*>) const = 0;
     };
 }
 

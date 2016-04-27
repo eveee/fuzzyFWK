@@ -123,7 +123,7 @@ int main()
 
     //Mettre SugenoThen dans la factory pour que ça soit appelé avec newThen
 
-     //operators
+    //operators
     NotMinus1<float> opNot;
     AndMin<float> opAnd;
     OrMax<float> opOr;
@@ -168,6 +168,42 @@ int main()
 
     //defuzzification
     Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
+
+    //interprète de cmd
+    float s, fo;
+    int and_, or_, then, defuzz, agg, cb; //1:cogdefuzz 2:sugenodefuzz
+    string in;
+    vector<string> fct;
+
+        cout << "*****// Operateurs \\*****";
+        cout << endl << "AND (1:AndMin, 2:AndMult) -> "; cin >> and_;
+        cout << endl << "OR (1:OrMax, 2:OrPlus) -> "; cin >> or_;
+        cout << endl << "THEN (1:ThenMin, 2:ThenMult, 3:SugenoThen) -> "; cin >> then;
+        if (then == 3)
+            defuzz = 2;
+        else
+            defuzz = 1;
+        cout << endl << "AGG (1:AggMax, 2:AggPlus) -> "; cin >> agg;
+
+        //decode operateurs
+
+        cout << "*****// Fonctions membres \\*****";
+        cout << endl << "Combien ? -> "; cin >> cb;
+        cout << endl << ""
+        while (fct.size() < cb){
+            cin >> in;
+            fct.push_back(in);
+        }
+
+        //decode fonctions membres
+
+    while(true){
+        cout << "service : "; cin >> s;
+        service.setValue(s);
+        cout << "food : "; cin >> fo;
+        food.setValue(fo);
+        cout << "tips -> " << system->evaluate() << endl;
+    }
 
     return 0;
 }
