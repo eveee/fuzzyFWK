@@ -29,6 +29,8 @@ using namespace std;
 using namespace core;
 using namespace fuzzy;
 
+
+
 int main()
 {/*
     ValueModel<float> v(2);
@@ -113,13 +115,10 @@ int main()
         food.setValue(fo);
         cout << "tips -> " << system->evaluate() << endl;
     }
-*/
-
     /*vector<float> c = {1, 2, 3, 4, 5};
     Expression<float>* vm[4] = {new ValueModel<float>(1), new ValueModel<float>(2), new ValueModel<float>(3), new ValueModel<float>(4)};
     SugenoConclusion<float> opSg(c);
     cout << opSg.evaluate(vm);
-    */
 
     //Mettre SugenoThen dans la factory pour que ça soit appelé avec newThen
 
@@ -168,34 +167,78 @@ int main()
 
     //defuzzification
     Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
-
+*/
     //interprète de cmd
     float s, fo;
-    int and_, or_, then, defuzz, agg, cb; //1:cogdefuzz 2:sugenodefuzz
-    string in;
-    vector<string> fct;
+    int and_, or_, then, defuzz, agg, cb;
+    string poor, good, excellent, rancid, delicious, cheap, average, generous;
 
-        cout << "*****// Operateurs \\*****";
-        cout << endl << "AND (1:AndMin, 2:AndMult) -> "; cin >> and_;
-        cout << endl << "OR (1:OrMax, 2:OrPlus) -> "; cin >> or_;
-        cout << endl << "THEN (1:ThenMin, 2:ThenMult, 3:SugenoThen) -> "; cin >> then;
-        if (then == 3)
-            defuzz = 2;
-        else
-            defuzz = 1;
-        cout << endl << "AGG (1:AggMax, 2:AggPlus) -> "; cin >> agg;
+    NotMinus1<float> opNot;
+    CogDefuzz<float> opDefuzzCog; SugenoDefuzz<float> opDefuzzSugeno;
 
-        //decode operateurs
+    Is<float> isp, isgo, ise, isr, isd, isc, isa, isge;
 
-        cout << "*****// Fonctions membres \\*****";
-        cout << endl << "Combien ? -> "; cin >> cb;
-        cout << endl << ""
-        while (fct.size() < cb){
-            cin >> in;
-            fct.push_back(in);
-        }
+    ValueModel<float> service(0);
+    ValueModel<float> food(0);
+    ValueModel<float> tips(0);
 
-        //decode fonctions membres
+    cout << "Application permettant de calculer les pourboires " << endl;
+    cout << endl <<  "***** Operateurs *****";
+    cout << endl << "AND (1:AndMin, 2:AndMult) -> "; cin >> and_;
+    cout << endl << "OR (1:OrMax, 2:OrPlus) -> "; cin >> or_;
+    cout << endl << "THEN (1:ThenMin, 2:ThenMult, 3:SugenoThen) -> "; cin >> then;
+    if (then == 3)
+        defuzz = 2; //sugeno defuzz
+    else
+        defuzz = 1; //cog defuzz
+    cout << endl << "AGG (1:AggMax, 2:AggPlus) -> "; cin >> agg;
+
+        /*ici il faudra decoder les operateurs :
+
+            if(defuzz = 1)
+                FuzzyFactory<float> f(&opNot,&decodeAnd(and_),&decodeAnd(or_),&decodeThen(then),&decodeAgg(agg),&opDefuzzCog);
+            else
+                FuzzyFactory<float> f(&opNot,&decodeAnd(and_),&decodeAnd(or_),&decodeThen(then),&decodeAgg(agg),&opDefuzzSugeno);
+        */
+
+    cout << "***** Fonctions membres *****";
+    cout << endl << "Répondre par ";
+    cout << "isbell min center mid";
+    cout << endl << "OU isgauss center sigma";
+    cout << endl << "OU istrap min midone midtwo max";
+    cout << endl << "OU istrapl min max";
+    cout << endl << "OU istrapr min max";
+    cout << endl << "OU istriangle min mid max" << endl;
+
+    cout << endl << "poor -> "; cin >> poor;
+    cout << endl << "good -> "; cin >> good;
+    cout << endl << "excellent -> "; cin >> excellent;
+    cout << endl << "rancid -> "; cin >> rancid;
+    cout << endl << "delicious -> "; cin >> delicious;
+    cout << endl << "cheap -> "; cin >> cheap;
+    cout << endl << "average -> "; cin >> average;
+    cout << endl << "generous -> "; cin >> generous;
+
+        //il faudra decoder les fonctions membres avec une méthode qui se sert de string tokenizer (decodeIs(string))
+
+    Expression<float> *r =
+    f.newAgg(
+        f.newAgg(
+            f.newThen(
+                    f.newOr(f.newIs(&decodeIs(poor), &service), f.newIs(&decodeIs(rancid), &food)),
+                    f.newIs(&decodeIs(cheap), &tips)
+            ),
+            f.newThen(
+                f.newIs(&decodeIs(good), &service),f.newIs(&decodeIs(average), &tips)
+            )
+        ),
+        f.newThen(
+            f.newOr(f.newIs(&decodeIs(excellent), &service), f.newIs(&decodeIs(delicious), &food)),
+            f.newIs(&decodeIs(generous), &tips)
+        )
+    );
+
+    Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
 
     while(true){
         cout << "service : "; cin >> s;

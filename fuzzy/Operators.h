@@ -21,25 +21,6 @@ namespace fuzzy {
 	template <class T>
 	class Agg : public core::BinaryExpression<T> {};
 
-	/*template <class T>
-	class MamdaniDefuzz : public core::BinaryExpression<T> {
-
-		MamdaniDefuzz() {
-			...
-		}
-
-		Mamdanidefuzz(const T&, const T&, constT&) {
-			...
-		}
-
-	};
-
-	template <class T>
-	class SugenoDefuzz : public core::NaryExpression<T> {};
-
-	template <class T>
-	class SugenoConclusion : public core::NaryExpression<T> {};*/
-
  }
 
  #endif
