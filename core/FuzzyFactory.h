@@ -4,6 +4,8 @@
 #include "ExpressionFactory.h"
 #include "../fuzzy/Operators.h"
 #include "../fuzzy/MamdaniDefuzz.h"
+#include "../fuzzy/SugenoDefuzz.h"
+#include "NaryShadowExpression.h"
 
 
 namespace core {
@@ -14,6 +16,7 @@ namespace core {
 		public :
 
 		    FuzzyFactory(fuzzy::Not<T>*, fuzzy::And<T>*, fuzzy::Or<T>*, fuzzy::Then<T>*, fuzzy::Agg<T>*, fuzzy::MamdaniDefuzz<T>*);
+		    FuzzyFactory(fuzzy::Not<T>*, fuzzy::And<T>*, fuzzy::Or<T>*, fuzzy::Then<T>*, fuzzy::Agg<T>*, fuzzy::SugenoDefuzz<T>*, fuzzy::SugenoConclusion<T>*);
 
 			Expression<T>* newNot(Expression<T>*) const;
 			Expression<T>* newIs(fuzzy::Is<T>*, Expression<T>*) const;
@@ -22,6 +25,8 @@ namespace core {
 			Expression<T>* newThen(Expression<T>*, Expression<T>*) const;
 			Expression<T>* newAgg(Expression<T>*, Expression<T>*) const;
 			Expression<T>* newDefuzz(Expression<T>*, Expression<T>*, const T& min, const T& max, const T& step) const;
+			Expression<T>* newSugenoDefuzz(vector<Expression<T>*>*) const;
+			Expression<T>* newSugenoConclusion(vector<Expression<T>*>*) const;
 
 			void changeNot(fuzzy::Not<T>*);
 			void changeAnd(fuzzy::And<T>*);
@@ -39,6 +44,8 @@ namespace core {
 			BinaryShadowExpression<T>* _agg;
 			BinaryShadowExpression<T>* _defuzz;
 
+			NaryShadowExpression<T>* _sugenoDefuzz;
+			NaryShadowExpression<T>* _sugenoConclusion;
 	};
 
 	template <class T>
@@ -54,6 +61,24 @@ namespace core {
 	    _then(new BinaryShadowExpression<T>(__then)),
 	    _agg(new BinaryShadowExpression<T>(__agg)),
 	    _defuzz(new BinaryShadowExpression<T>(__defuzz))
+    {
+    }
+
+    template <class T>
+	FuzzyFactory<T>::FuzzyFactory(fuzzy::Not<T>* __not,
+                               fuzzy::And<T>* __and,
+                               fuzzy::Or<T>* __or,
+                               fuzzy::Then<T>* __then,
+                               fuzzy::Agg<T>* __agg,
+                               fuzzy::SugenoDefuzz<T>* __defuzz,
+                               fuzzy::SugenoConclusion<T>* __conclusion):
+	    _not(new UnaryShadowExpression<T>(__not)),
+	    _and(new BinaryShadowExpression<T>(__and)),
+	    _or(new BinaryShadowExpression<T>(__or)),
+	    _then(new BinaryShadowExpression<T>(__then)),
+	    _agg(new BinaryShadowExpression<T>(__agg)),
+	    _sugenoDefuzz(new NaryShadowExpression<T>(__defuzz)),
+	    _sugenoConclusion(new NaryShadowExpression<T>(__conclusion))
     {
     }
 
@@ -102,6 +127,18 @@ namespace core {
 		target->setStep(step);
 
 		return ExpressionFactory<T>::newBinary(_defuzz, l, r);
+	}
+
+	template <class T>
+	Expression<T>* FuzzyFactory<T>::newSugenoDefuzz(vector<Expression<T>*>* operands) const
+	{
+		return ExpressionFactory<T>::newNary(_sugenoDefuzz, operands);
+	}
+
+	template <class T>
+	Expression<T>* FuzzyFactory<T>::newSugenoConclusion(vector<Expression<T>*>* operands) const
+	{
+		return ExpressionFactory<T>::newNary(_sugenoConclusion, operands);
 	}
 
 	template <class T>

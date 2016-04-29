@@ -9,11 +9,11 @@ namespace fuzzy{
     template <class T>
     class SugenoDefuzz{
         public :
-            virtual T evaluate(vector<Expression<T>*>) const;
+            virtual T evaluate(vector<Expression<T>*>*) const;
     };
 
     template <class T>
-    T SugenoDefuzz<T>::evaluate(vector<Expression<T>*> operands) const{
+    T SugenoDefuzz<T>::evaluate(vector<Expression<T>*>* operands) const{
         T denum = 0; T num = 0;
         BinaryExpressionModel<T> *bem;
         BinaryShadowExpression<T> *bse;

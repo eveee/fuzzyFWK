@@ -2,8 +2,9 @@
 #define EXPRESSIONFACTORY_H_INCLUDED
 
 #include "Expression.h"
-#include "UnaryExpression.h"
-#include "BinaryExpression.h"
+#include "UnaryExpressionModel.h"
+#include "BinaryExpressionModel.h"
+#include "NaryExpressionModel.h"
 #include <set>
 
 using namespace std;
@@ -26,6 +27,7 @@ namespace core {
 			Expression<T>* Hold(Expression<T>*);
 			Expression<T>* newUnary(UnaryExpression<T>*, Expression<T>*) const;
 			Expression<T>* newBinary(BinaryExpression<T>*, Expression<T>*, Expression<T>*) const;
+			Expression<T>* newNary(NaryExpression<T>*, vector<Expression<T>*>*) const;
 
 		private :
 
@@ -61,6 +63,12 @@ namespace core {
 	Expression<T>* ExpressionFactory<T>::newBinary(BinaryExpression<T>* ope, Expression<T>* l, Expression<T>* r) const
 	{
 		return new BinaryExpressionModel<T>(ope, l, r);
+	}
+
+	template <class T>
+	Expression<T>* ExpressionFactory<T>::newNary(NaryExpression<T>* operator_, vector<Expression<T>*>* operands) const
+	{
+		return new NaryExpressionModel<T>(operator_, operands);
 	}
 
 }

@@ -7,22 +7,22 @@ namespace fuzzy{
     template <class T>
     class SugenoConclusion{
         public:
-            SugenoConclusion(const vector<T>&);
-            virtual T evaluate(vector<Expression<T>*>) const;
+            SugenoConclusion(const vector<T>*);
+            virtual T evaluate(vector<Expression<T>*>*) const;
         private:
-            vector<T> coeff;
+            vector<T>* coeff;
     };
 
     template <class T>
-    SugenoConclusion<T>::SugenoConclusion(const vector<T>& _coeff):
+    SugenoConclusion<T>::SugenoConclusion(const vector<T>* _coeff):
         coeff(_coeff)
     {}
 
     template <class T>
-    T SugenoConclusion<T>::evaluate(vector<Expression<T>*> operands) const{
+    T SugenoConclusion<T>::evaluate(vector<Expression<T>*>* operands) const{
         T z = 0;
         for(int i = 0; i < coeff.size()-1; i++){
-            z += coeff.at(i) * operands[i]->evaluate();
+            z += coeff.at(i) * *operands[i]->evaluate();
         }
         z += coeff.at(coeff.size() - 1);
         return z;
