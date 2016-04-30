@@ -7,7 +7,7 @@
 namespace fuzzy{
 
     template <class T>
-    class SugenoDefuzz{
+    class SugenoDefuzz : public NaryExpression<T> {
         public :
             virtual T evaluate(vector<Expression<T>*>*) const;
     };
@@ -20,13 +20,13 @@ namespace fuzzy{
         SugenoThen<T> *st;
 
         for(int i = 0; i < operands->size(); i++){
-            bem = (BinaryExpressionModel<T>) operands.at(i);
-            bse = (BinaryShadowExpression<T>) (bem->getOperator());
+            bem = (BinaryExpressionModel<T>*) operands->at(i);
+            bse = (BinaryShadowExpression<T>*) (bem->getOperator());
 
-            st = (SugenoThen<T>) (bse -> getTarget());
+            st = (SugenoThen<T>*) (bse->getTarget());
 
             denum += st->getPremiseValue();
-            num += operands.at(i);
+            num += operands->at(i)->evaluate();
         }
         return (denum == 0 ? 0 : num/denum);
     }

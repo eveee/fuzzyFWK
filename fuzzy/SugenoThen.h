@@ -14,7 +14,7 @@ namespace fuzzy{
             virtual T evaluate(Expression<T>*, Expression<T>*) const;
             T getPremiseValue() const;
         private :
-            T premiseValue;
+            mutable T premiseValue;
     };
 
     template <class T>
@@ -31,7 +31,7 @@ namespace fuzzy{
 
     template <class T>
     T SugenoThen<T>::getPremiseValue() const{
-        return getPremiseValue;
+        return premiseValue;
     }
 
 }

@@ -10,12 +10,12 @@ namespace fuzzy{
     template <class T>
     class AggMax : public Agg<T>{
         public :
-            T evaluate(Expression<T>*, Expression<T>*);
+            virtual T evaluate(Expression<T>*, Expression<T>*) const;
     };
 
 
     template <class T>
-    T AggMax<T>::evaluate(Expression<T>* l, Expression<T>* r){
+    T AggMax<T>::evaluate(Expression<T>* l, Expression<T>* r) const{
         T left = l->evaluate();
         T right = r->evaluate();
         return ((left >= right) ? left : right);

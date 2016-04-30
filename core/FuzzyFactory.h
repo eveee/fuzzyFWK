@@ -16,7 +16,7 @@ namespace core {
 		public :
 
 		    FuzzyFactory(fuzzy::Not<T>*, fuzzy::And<T>*, fuzzy::Or<T>*, fuzzy::Then<T>*, fuzzy::Agg<T>*, fuzzy::MamdaniDefuzz<T>*);
-		    FuzzyFactory(fuzzy::Not<T>*, fuzzy::And<T>*, fuzzy::Or<T>*, fuzzy::Then<T>*, fuzzy::Agg<T>*, fuzzy::SugenoDefuzz<T>*, fuzzy::SugenoConclusion<T>*);
+		    FuzzyFactory(fuzzy::Not<T>*, fuzzy::And<T>*, fuzzy::Or<T>*, fuzzy::Then<T>*, fuzzy::Agg<T>*, core::NaryExpression<T>*, core::NaryExpression<T>*);
 
 			Expression<T>* newNot(Expression<T>*) const;
 			Expression<T>* newIs(fuzzy::Is<T>*, Expression<T>*) const;
@@ -70,8 +70,8 @@ namespace core {
                                fuzzy::Or<T>* __or,
                                fuzzy::Then<T>* __then,
                                fuzzy::Agg<T>* __agg,
-                               fuzzy::SugenoDefuzz<T>* __defuzz,
-                               fuzzy::SugenoConclusion<T>* __conclusion):
+                               core::NaryExpression<T>* __defuzz,
+                               core::NaryExpression<T>* __conclusion):
 	    _not(new UnaryShadowExpression<T>(__not)),
 	    _and(new BinaryShadowExpression<T>(__and)),
 	    _or(new BinaryShadowExpression<T>(__or)),
