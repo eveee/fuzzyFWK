@@ -19,14 +19,14 @@ namespace fuzzy{
         BinaryShadowExpression<T> *bse;
         SugenoThen<T> *st;
 
-        for(int i = 0; i < operands->size(); i++){
-            bem = (BinaryExpressionModel<T>*) operands->at(i);
+        for(typename std::vector<Expression<T>*>::iterator itop = operands->begin(); itop != operands->end(); itop++){
+            bem = (BinaryExpressionModel<T>*) (*itop);
             bse = (BinaryShadowExpression<T>*) (bem->getOperator());
 
             st = (SugenoThen<T>*) (bse->getTarget());
 
             denum += st->getPremiseValue();
-            num += operands->at(i)->evaluate();
+            num += (*itop)->evaluate();
         }
         return (denum == 0 ? 0 : num/denum);
     }

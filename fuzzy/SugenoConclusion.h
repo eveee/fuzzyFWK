@@ -21,10 +21,11 @@ namespace fuzzy{
     template <class T>
     T SugenoConclusion<T>::evaluate(vector<Expression<T>*>* operands) const{
         T z = 0;
-        for(int i = 0; i < coeff->size()-1; i++){
-            z += coeff->at(i) * operands->at(i)->evaluate();
+        typename std::vector<Expression<T>*>::iterator itop = operands->begin();
+        typename std::vector<T>::iterator it = coeff->begin();
+        for(; it != coeff->end() && itop != operands->end(); it++, itop++){
+            z += (*it) * (*itop)->evaluate();
         }
-        z += coeff->at(coeff->size() - 1);
         return z;
     }
 }
