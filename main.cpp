@@ -31,45 +31,33 @@ using namespace core;
 using namespace fuzzy;
 
 And<float>* decodeAnd(int and_){
-    AndMin<float> opAndMin;
-    AndMult<float> opAndMult;
     if (and_ == 1)
-        return &opAndMin;
+        return new AndMin<float>();
     else
-        return &opAndMult;
+        return new AndMult<float>();
 }
 
 Or<float>* decodeOr(int or_){
-    OrMax<float> opOrMax;
-    OrPlus<float> opOrPlus;
     if (or_ == 1)
-        return &opOrMax;
+        return new OrMax<float>();
     else
-        return &opOrPlus;
+        return new OrPlus<float>();
 }
 
 Then<float>* decodeThen(int then){
-    ThenMin<float> opThenMin;
-    ThenMult<float> opThenMult;
-    SugenoThen<float> opSugenoThen;
     if (then == 1)
-        return &opThenMin;
+        return new ThenMin<float>();
     else if (then == 2)
-        return &opThenMult;
+        return new ThenMult<float>();
     else
-        return &opSugenoThen;
+        return new SugenoThen<float>();
 }
 
 Agg<float>* decodeAgg(int agg){
-    AggMax<float> opAggMax;
-    AggPlus<float> opAggPlus;
-    AggMax<float> opAggMin;
     if (agg == 1)
-        return &opAggMax;
-    else if (agg == 2)
-        return &opAggPlus;
+        return new AggMax<float>();
     else
-        return &opAggMin;
+        return new AggPlus<float>();
 }
 
 Is<float>* decodeIs(string in){
@@ -82,15 +70,15 @@ Is<float>* decodeIs(string in){
 
     if(cmd.compare("isbell") == 0){
         string min_ = in.substr(pos1 + 1, pos2 - (pos1 + 1));
-        string center = in.substr(pos2 + 1, pos3 - (pos2 + 1));
-        string mid = in.substr(pos3 + 1, in.size() - (pos3 + 1));
-        return new IsBell<float>(atof(min_.c_str()), atof(mid.c_str()), atof(center.c_str()));
+        string mid = in.substr(pos2 + 1, pos3 - (pos2 + 1));
+        string center = in.substr(pos3 + 1, in.size() - (pos3 + 1));
+        return new IsBell<float>(strtof(min_.c_str(), NULL), strtof(mid.c_str(), NULL), strtof(center.c_str(), NULL));
     }
 
     else if(cmd.compare("isgauss") == 0){
         string center = in.substr(pos1 + 1, pos2 - (pos1 + 1));
         string sigma = in.substr(pos2 + 1, in.size() - (pos2 + 1));
-        return new IsGaussian<float>(atof(center.c_str()), atof(sigma.c_str()));
+        return new IsGaussian<float>(strtof(center.c_str(), NULL), strtof(sigma.c_str(), NULL));
     }
 
     else if(cmd.compare("istrap") == 0){
@@ -98,26 +86,26 @@ Is<float>* decodeIs(string in){
         string mid1 = in.substr(pos2 + 1, pos3 - (pos2 + 1));
         string mid2 = in.substr(pos3 + 1, pos4 - (pos3 + 1));
         string max_ = in.substr(pos4 + 1, in.size() - (pos4 + 1));
-        return new IsTrapeze<float>(atof(min_.c_str()), atof(mid1.c_str()), atof(mid2.c_str()), atof(max_.c_str()));
+        return new IsTrapeze<float>(strtof(min_.c_str(), NULL), strtof(mid1.c_str(), NULL), strtof(mid2.c_str(), NULL), strtof(max_.c_str(), NULL));
     }
 
     else if(cmd.compare("istrapl") == 0){
         string min_ = in.substr(pos1 + 1, pos2 - (pos1 + 1));
         string max_ = in.substr(pos2 + 1, in.size() - (pos2 + 1));
-        return new IsTrapezeLeft<float>(atof(min_.c_str()), atof(max_.c_str()));
+        return new IsTrapezeLeft<float>(strtof(min_.c_str(), NULL), strtof(max_.c_str(), NULL));
     }
 
     else if(cmd.compare("istrapr") == 0){
         string min_ = in.substr(pos1 + 1, pos2 - (pos1 + 1));
         string max_ = in.substr(pos2 + 1, in.size() - (pos2 + 1));
-        return new IsTrapezeRight<float>(atof(min_.c_str()), atof(max_.c_str()));
+        return new IsTrapezeRight<float>(strtof(min_.c_str(), NULL), strtof(max_.c_str(), NULL));
     }
 
     else {
         string min_ = in.substr(pos1 + 1, pos2 - (pos1 + 1));
         string mid = in.substr(pos2 + 1, pos3 - (pos2 + 1));
         string max_ = in.substr(pos3 + 1, in.size() - (pos3 + 1));
-        return new IsTriangle<float>(atof(min_.c_str()), atof(mid.c_str()), atof(max_.c_str()));
+        return new IsTriangle<float>(strtof(min_.c_str(), NULL), strtof(mid.c_str(), NULL), strtof(max_.c_str(), NULL));
     }
 
 }
@@ -159,7 +147,7 @@ int main()
         FuzzyFactory<float> f(&opNot,decodeAnd(and_),decodeOr(or_),decodeThen(then),decodeAgg(agg),opDefuzzSugeno,opSugenoConclusion);
         cout << endl << endl << "***** Fonctions membres *****";
         cout << endl << "Repondre par ";
-        cout << endl << "isbell min center mid";
+        cout << endl << "isbell min mid center";
         cout << endl << "OU isgauss center sigma";
         cout << endl << "OU istrap min midone midtwo max";
         cout << endl << "OU istrapl min max";
@@ -167,52 +155,6 @@ int main()
         cout << endl << "OU istriangle min mid max" << endl;
 
         cin.ignore();
-        cout << endl << "poor -> "; getline(cin, poor);
-        cout << endl << "good -> "; getline(cin, good);
-        cout << endl << "excellent -> "; getline(cin, excellent);
-        cout << endl << "rancid -> "; getline(cin, rancid);
-        cout << endl << "delicious -> "; getline(cin, delicious);
-        cout << endl << "cheap -> "; getline(cin, cheap);
-        cout << endl << "average -> "; getline(cin, average);
-        cout << endl << "generous -> "; getline(cin, generous);
-
-        Expression<float> *r =
-        f.newAgg(
-            f.newAgg(
-                f.newThen(
-                        f.newOr(f.newIs(decodeIs(poor), &service), f.newIs(decodeIs(rancid), &food)),
-                        f.newIs(decodeIs(cheap), &tips)
-                ),
-                f.newThen(
-                    f.newIs(decodeIs(good), &service),f.newIs(decodeIs(average), &tips)
-                )
-            ),
-            f.newThen(
-                f.newOr(f.newIs(decodeIs(excellent), &service), f.newIs(decodeIs(delicious), &food)),
-                f.newIs(decodeIs(generous), &tips)
-            )
-        );  Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
-
-        while(true){
-            cout << "service : "; cin >> s;
-            service.setValue(s);
-            cout << "food : "; cin >> fo;
-            food.setValue(fo);
-            cout << "tips -> " << system->evaluate() << endl;
-        }
-
-    }
-    else{
-        FuzzyFactory<float> f(&opNot,decodeAnd(and_),decodeOr(or_),decodeThen(then),decodeAgg(agg),&opDefuzzCog);
-        cout << endl << endl << "***** Fonctions membres *****";
-        cout << endl << "Repondre par ";
-        cout << endl << "isbell min center mid";
-        cout << endl << "OU isgauss center sigma";
-        cout << endl << "OU istrap min midone midtwo max";
-        cout << endl << "OU istrapl min max";
-        cout << endl << "OU istrapr min max";
-        cout << endl << "OU istriangle min mid max" << endl;
-
         cout << endl << "poor -> "; getline(cin, poor);
         cout << endl << "good -> "; getline(cin, good);
         cout << endl << "excellent -> "; getline(cin, excellent);
@@ -253,15 +195,80 @@ int main()
                     f.newIs(decodeIs(delicious), &food)
                 ),
                 f.newSugenoConclusion(&SC_service_food)
-            )); core::Expression<float> *system = f.newSugenoDefuzz(&rules);
+            ));
+
+            core::Expression<float> *system = f.newSugenoDefuzz(&rules);
 
             while(true){
-                cout << "service : "; cin >> s;
+                cout << endl << "service : "; cin >> s;
                 service.setValue(s);
                 cout << "food : "; cin >> fo;
                 food.setValue(fo);
                 cout << "tips -> " << system->evaluate() << endl;
             }
+    }
+    else{
+        AndMin<float> opAnd;
+        OrMax<float> opOr;
+        ThenMin<float> opThen;
+        AggPlus<float> opAgg;
+
+        /*IsTriangle<float> poor(-5,0,5);
+        IsTriangle<float> good(0,5,10);
+        IsTriangle<float> excellent(5,10,15);
+        IsTriangle<float> rancid(-5,0,5);
+        IsTriangle<float> delicious(5,10,15);
+        IsTriangle<float> cheap(0,5,10);
+        IsTriangle<float> average(10,15,20);
+        IsTriangle<float> generous(20,25,30);*/
+
+        FuzzyFactory<float> f(&opNot,decodeAnd(and_),decodeOr(or_),decodeThen(then),decodeAgg(agg),&opDefuzzCog);
+        cout << endl << endl << "***** Fonctions membres *****";
+        cout << endl << "Repondre par ";
+        cout << endl << "isbell min center mid";
+        cout << endl << "OU isgauss center sigma";
+        cout << endl << "OU istrap min midone midtwo max";
+        cout << endl << "OU istrapl min max";
+        cout << endl << "OU istrapr min max";
+        cout << endl << "OU istriangle min mid max" << endl;
+
+        cin.ignore();
+        cout << endl << "poor -> "; getline(cin, poor);
+        cout << endl << "good -> "; getline(cin, good);
+        cout << endl << "excellent -> "; getline(cin, excellent);
+        cout << endl << "rancid -> "; getline(cin, rancid);
+        cout << endl << "delicious -> "; getline(cin, delicious);
+        cout << endl << "cheap -> "; getline(cin, cheap);
+        cout << endl << "average -> "; getline(cin, average);
+        cout << endl << "generous -> "; getline(cin, generous);
+
+        Expression<float> *r =
+        f.newAgg(
+            f.newAgg(
+                f.newThen(
+                        f.newOr(f.newIs(decodeIs(poor), &service), f.newIs(decodeIs(rancid), &food)),
+                        f.newIs(decodeIs(rancid), &tips)
+                ),
+                f.newThen(
+                    f.newIs(decodeIs(good), &service),f.newIs(decodeIs(average), &tips)
+                )
+            ),
+            f.newThen(
+                f.newOr(f.newIs(decodeIs(excellent), &service), f.newIs(decodeIs(delicious), &food)),
+                f.newIs(decodeIs(generous), &tips)
+            )
+        );
+
+        Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
+
+        while(true){
+            cout << "service : "; cin >> s;
+            service.setValue(s);
+            cout << "food : "; cin >> fo;
+            food.setValue(fo);
+            cout << "tips -> " << system->evaluate() << endl;
+        }
+
     }
 
 
