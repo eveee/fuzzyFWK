@@ -127,42 +127,51 @@ int main()
     CogDefuzz<float> opDefuzzCog; NaryExpression<float>* opDefuzzSugeno = new SugenoDefuzz<float>() ;
 
     vector<float>* coeff = new vector<float>();
+	/*coeff->push_back(1.0);
 	coeff->push_back(1.0);
 	coeff->push_back(1.0);
-	coeff->push_back(1.0);
-    NaryExpression<float>* opSugenoConclusion = new SugenoConclusion<float>(coeff);
+    NaryExpression<float>* opSugenoConclusion = new SugenoConclusion<float>(coeff);*/
 
     ValueModel<float> service(0);
     ValueModel<float> food(0);
     ValueModel<float> tips(0);
 
-    cout << "Application permettant de calculer les pourboires " << endl;
-    cout << endl <<  "***** Operateurs *****";
-    cout << endl << "AND (1:AndMin, 2:AndMult) -> "; cin >> and_;
-    cout << endl << "OR (1:OrMax, 2:OrPlus) -> "; cin >> or_;
-    cout << endl << "THEN (1:ThenMin, 2:ThenMult, 3:SugenoThen) -> "; cin >> then;
-    cout << endl << "AGG (1:AggMax, 2:AggPlus) -> "; cin >> agg;
+    cout << "\t Application permettant de calculer les pourboires ";
+    cout << endl << "\t -------------------------------------------------" << endl << endl;
+    cout << endl <<  "\t *****%% Operateurs %%*****" << endl;
+    cout << endl << "\t AND (1:AndMin, 2:AndMult): "; cin >> and_;
+    cout << "\t OR (1:OrMax, 2:OrPlus): "; cin >> or_;
+    cout << "\t THEN (1:ThenMin, 2:ThenMult, 3:SugenoThen): "; cin >> then;
+    cout << "\t AGG (1:AggMax, 2:AggPlus): "; cin >> agg;
 
     if(then == 3){
+        float c1, c2;
+
+        cout << endl << endl << "\t Rentrez deux coefficients (SugenoConclusion): "; cin >> c1; cin >> c2;
+
+        coeff->push_back(c1); coeff->push_back(c2); coeff->push_back(1.0);
+
+        NaryExpression<float>* opSugenoConclusion = new SugenoConclusion<float>(coeff);
         FuzzyFactory<float> f(&opNot,decodeAnd(and_),decodeOr(or_),decodeThen(then),decodeAgg(agg),opDefuzzSugeno,opSugenoConclusion);
-        cout << endl << endl << "***** Fonctions membres *****";
-        cout << endl << "Repondre par ";
-        cout << endl << "isbell min mid center";
-        cout << endl << "OU isgauss center sigma";
-        cout << endl << "OU istrap min midone midtwo max";
-        cout << endl << "OU istrapl min max";
-        cout << endl << "OU istrapr min max";
-        cout << endl << "OU istriangle min mid max" << endl;
+
+        cout << endl << endl << "\t *****%% Fonctions membres %%*****" << endl;
+        cout << endl << "\t Repondre par ";
+        cout << endl << "\t\t isbell min mid center";
+        cout << endl << "\t\t OU isgauss center sigma";
+        cout << endl << "\t\t OU istrap min midone midtwo max";
+        cout << endl << "\t\t OU istrapl min max";
+        cout << endl << "\t\t OU istrapr min max";
+        cout << endl << "\t\t OU istriangle min mid max" << endl;
 
         cin.ignore();
-        cout << endl << "poor -> "; getline(cin, poor);
-        cout << endl << "good -> "; getline(cin, good);
-        cout << endl << "excellent -> "; getline(cin, excellent);
-        cout << endl << "rancid -> "; getline(cin, rancid);
-        cout << endl << "delicious -> "; getline(cin, delicious);
-        cout << endl << "cheap -> "; getline(cin, cheap);
-        cout << endl << "average -> "; getline(cin, average);
-        cout << endl << "generous -> "; getline(cin, generous);
+        cout << endl << "\t poor: "; getline(cin, poor);
+        cout << "\t good: "; getline(cin, good);
+        cout << "\t excellent: "; getline(cin, excellent);
+        cout << "\t rancid: "; getline(cin, rancid);
+        cout << "\t delicious: "; getline(cin, delicious);
+        cout << "\t cheap: "; getline(cin, cheap);
+        cout << "\t average: "; getline(cin, average);
+        cout << "\t generous: "; getline(cin, generous);
 
         std::vector<core::Expression<float>*> rules;
 
@@ -199,12 +208,14 @@ int main()
 
             core::Expression<float> *system = f.newSugenoDefuzz(&rules);
 
+            cout << endl << endl << "\t *****%% Calcul du pourboire %%*****";
+
             while(true){
-                cout << endl << "service : "; cin >> s;
+                cout << endl << endl << "\t service: "; cin >> s;
                 service.setValue(s);
-                cout << "food : "; cin >> fo;
+                cout << "\t food: "; cin >> fo;
                 food.setValue(fo);
-                cout << "tips -> " << system->evaluate() << endl;
+                cout << "\t tips -> " << system->evaluate() << endl;
             }
     }
     else{
@@ -223,24 +234,24 @@ int main()
         IsTriangle<float> generous(20,25,30);*/
 
         FuzzyFactory<float> f(&opNot,decodeAnd(and_),decodeOr(or_),decodeThen(then),decodeAgg(agg),&opDefuzzCog);
-        cout << endl << endl << "***** Fonctions membres *****";
-        cout << endl << "Repondre par ";
-        cout << endl << "isbell min center mid";
-        cout << endl << "OU isgauss center sigma";
-        cout << endl << "OU istrap min midone midtwo max";
-        cout << endl << "OU istrapl min max";
-        cout << endl << "OU istrapr min max";
-        cout << endl << "OU istriangle min mid max" << endl;
+        cout << endl << endl << "\t *****%% Fonctions membres %%*****" << endl;
+        cout << endl << "\t Repondre par ";
+        cout << endl << "\t\t isbell min mid center";
+        cout << endl << "\t\t OU isgauss center sigma";
+        cout << endl << "\t\t OU istrap min midone midtwo max";
+        cout << endl << "\t\t OU istrapl min max";
+        cout << endl << "\t\t OU istrapr min max";
+        cout << endl << "\t\t OU istriangle min mid max" << endl;
 
         cin.ignore();
-        cout << endl << "poor -> "; getline(cin, poor);
-        cout << endl << "good -> "; getline(cin, good);
-        cout << endl << "excellent -> "; getline(cin, excellent);
-        cout << endl << "rancid -> "; getline(cin, rancid);
-        cout << endl << "delicious -> "; getline(cin, delicious);
-        cout << endl << "cheap -> "; getline(cin, cheap);
-        cout << endl << "average -> "; getline(cin, average);
-        cout << endl << "generous -> "; getline(cin, generous);
+        cout << endl << "\t poor: "; getline(cin, poor);
+        cout << "\t good: "; getline(cin, good);
+        cout << "\t excellent: "; getline(cin, excellent);
+        cout << "\t rancid: "; getline(cin, rancid);
+        cout << "\t delicious: "; getline(cin, delicious);
+        cout << "\t cheap: "; getline(cin, cheap);
+        cout << "\t average: "; getline(cin, average);
+        cout << "\t generous: "; getline(cin, generous);
 
         Expression<float> *r =
         f.newAgg(
@@ -261,12 +272,14 @@ int main()
 
         Expression<float> *system = f.newDefuzz(&tips, r, 0, 25, 1);
 
+        cout << endl << endl << "\t *****%% Calcul du pourboire %%*****";
+
         while(true){
-            cout << "service : "; cin >> s;
-            service.setValue(s);
-            cout << "food : "; cin >> fo;
-            food.setValue(fo);
-            cout << "tips -> " << system->evaluate() << endl;
+                cout << endl << endl << "\t service: "; cin >> s;
+                service.setValue(s);
+                cout << "\t food: "; cin >> fo;
+                food.setValue(fo);
+                cout << "\t tips -> " << system->evaluate() << endl;
         }
 
     }
